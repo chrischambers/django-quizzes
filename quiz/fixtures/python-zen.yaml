@@ -1,0 +1,190 @@
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 21:55:33.707347',
+    datetime_modified: !!timestamp '2010-09-27 22:25:45.978411', difficulty: 1, editor: null,
+    is_active: true, question: '... is better than complex.'}
+  model: quiz.question
+  pk: 1
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 21:57:31.394704',
+    datetime_modified: !!timestamp '2010-09-27 22:25:45.999823', difficulty: 1, editor: null,
+    is_active: true, question: '... is better than complicated.'}
+  model: quiz.question
+  pk: 2
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 21:58:31.000787',
+    datetime_modified: !!timestamp '2010-09-27 22:25:46.016189', difficulty: 1, editor: null,
+    is_active: true, question: '... is better than nested.'}
+  model: quiz.question
+  pk: 3
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 21:59:19.814695',
+    datetime_modified: !!timestamp '2010-09-27 22:25:46.027951', difficulty: 1, editor: null,
+    is_active: true, question: '... is better than dense.'}
+  model: quiz.question
+  pk: 4
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 21:59:56.088238',
+    datetime_modified: !!timestamp '2010-09-27 22:25:46.047212', difficulty: 10, editor: null,
+    is_active: true, question: Readability ...}
+  model: quiz.question
+  pk: 5
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 22:01:36.389120',
+    datetime_modified: !!timestamp '2010-09-27 22:25:46.064483', difficulty: 10, editor: null,
+    is_active: true, question: Special cases aren't special enough to ...}
+  model: quiz.question
+  pk: 6
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 22:04:12.202809',
+    datetime_modified: !!timestamp '2010-09-27 22:25:46.092501', difficulty: 20, editor: null,
+    is_active: true, question: 'In the face of ambiguity, refuse the temptation to
+      ...'}
+  model: quiz.question
+  pk: 9
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 22:03:13.818364',
+    datetime_modified: !!timestamp '2010-09-27 22:25:46.116528', difficulty: 20, editor: null,
+    is_active: true, question: Errors should never pass ...}
+  model: quiz.question
+  pk: 8
+- fields: {creator: null, datetime_created: !!timestamp '2010-09-27 22:02:39.760495',
+    datetime_modified: !!timestamp '2010-09-27 22:25:46.136022', difficulty: 10, editor: null,
+    is_active: true, question: Although ... beats purity.}
+  model: quiz.question
+  pk: 7
+- fields: {answer: Super, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:55:33.712046', datetime_modified: !!timestamp '2010-09-27 22:25:45.797693',
+    editor: null, is_active: true, question: 1, score: 0}
+  model: quiz.answer
+  pk: 1
+- fields: {answer: Sexy, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:55:33.714234', datetime_modified: !!timestamp '2010-09-27 22:25:45.802556',
+    editor: null, is_active: true, question: 1, score: 0}
+  model: quiz.answer
+  pk: 2
+- fields: {answer: Simple, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:55:33.716755', datetime_modified: !!timestamp '2010-09-27 22:25:45.807994',
+    editor: null, is_active: true, question: 1, score: 1}
+  model: quiz.answer
+  pk: 3
+- fields: {answer: Complex, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:57:31.399456', datetime_modified: !!timestamp '2010-09-27 22:25:45.811686',
+    editor: null, is_active: true, question: 2, score: 1}
+  model: quiz.answer
+  pk: 4
+- fields: {answer: Crazy, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:57:31.401861', datetime_modified: !!timestamp '2010-09-27 22:25:45.815588',
+    editor: null, is_active: true, question: 2, score: 0}
+  model: quiz.answer
+  pk: 5
+- fields: {answer: Crafty, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:57:31.404019', datetime_modified: !!timestamp '2010-09-27 22:25:45.819073',
+    editor: null, is_active: true, question: 2, score: 0}
+  model: quiz.answer
+  pk: 6
+- fields: {answer: Tested, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:58:31.005690', datetime_modified: !!timestamp '2010-09-27 22:25:45.822385',
+    editor: null, is_active: true, question: 3, score: 0}
+  model: quiz.answer
+  pk: 7
+- fields: {answer: Infested, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:58:31.008021', datetime_modified: !!timestamp '2010-09-27 22:25:45.827299',
+    editor: null, is_active: true, question: 3, score: 0}
+  model: quiz.answer
+  pk: 8
+- fields: {answer: Flat, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:58:31.010284', datetime_modified: !!timestamp '2010-09-27 22:25:45.831616',
+    editor: null, is_active: true, question: 3, score: 1}
+  model: quiz.answer
+  pk: 9
+- fields: {answer: Spartan, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:59:19.819496', datetime_modified: !!timestamp '2010-09-27 22:25:45.834952',
+    editor: null, is_active: true, question: 4, score: 0}
+  model: quiz.answer
+  pk: 10
+- fields: {answer: Sparse, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:59:19.821572', datetime_modified: !!timestamp '2010-09-27 22:25:45.838523',
+    editor: null, is_active: true, question: 4, score: 1}
+  model: quiz.answer
+  pk: 11
+- fields: {answer: Obtuse, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:59:19.823591', datetime_modified: !!timestamp '2010-09-27 22:25:45.847170',
+    editor: null, is_active: true, question: 4, score: 0}
+  model: quiz.answer
+  pk: 12
+- fields: {answer: schmeadability., creator: null, datetime_created: !!timestamp '2010-09-27
+      21:59:56.093097', datetime_modified: !!timestamp '2010-09-27 22:25:45.850856',
+    editor: null, is_active: true, question: 5, score: 0}
+  model: quiz.answer
+  pk: 13
+- fields: {answer: counts., creator: null, datetime_created: !!timestamp '2010-09-27
+      21:59:56.095377', datetime_modified: !!timestamp '2010-09-27 22:25:45.854452',
+    editor: null, is_active: true, question: 5, score: 1}
+  model: quiz.answer
+  pk: 14
+- fields: {answer: rocks!, creator: null, datetime_created: !!timestamp '2010-09-27
+      21:59:56.097420', datetime_modified: !!timestamp '2010-09-27 22:25:45.861312',
+    editor: null, is_active: true, question: 5, score: 0}
+  model: quiz.answer
+  pk: 15
+- fields: {answer: break the rules., creator: null, datetime_created: !!timestamp '2010-09-27
+      22:01:36.394352', datetime_modified: !!timestamp '2010-09-27 22:25:45.865747',
+    editor: null, is_active: true, question: 6, score: 1}
+  model: quiz.answer
+  pk: 16
+- fields: {answer: warrant writing something in Java., creator: null, datetime_created: !!timestamp '2010-09-27
+      22:01:36.396826', datetime_modified: !!timestamp '2010-09-27 22:25:45.869206',
+    editor: null, is_active: true, question: 6, score: 0}
+  model: quiz.answer
+  pk: 17
+- fields: {answer: personality, creator: null, datetime_created: !!timestamp '2010-09-27
+      22:02:39.765761', datetime_modified: !!timestamp '2010-09-27 22:25:45.872973',
+    editor: null, is_active: true, question: 7, score: 0}
+  model: quiz.answer
+  pk: 18
+- fields: {answer: predictability, creator: null, datetime_created: !!timestamp '2010-09-27
+      22:02:39.768041', datetime_modified: !!timestamp '2010-09-27 22:25:45.880600',
+    editor: null, is_active: true, question: 7, score: 0}
+  model: quiz.answer
+  pk: 19
+- fields: {answer: practicality, creator: null, datetime_created: !!timestamp '2010-09-27
+      22:02:39.770200', datetime_modified: !!timestamp '2010-09-27 22:25:45.884352',
+    editor: null, is_active: true, question: 7, score: 1}
+  model: quiz.answer
+  pk: 20
+- fields: {answer: wind., creator: null, datetime_created: !!timestamp '2010-09-27
+      22:03:13.823570', datetime_modified: !!timestamp '2010-09-27 22:25:45.890039',
+    editor: null, is_active: true, question: 8, score: 0}
+  model: quiz.answer
+  pk: 21
+- fields: {answer: 'by, like ships in the night.', creator: null, datetime_created: !!timestamp '2010-09-27
+      22:03:13.825764', datetime_modified: !!timestamp '2010-09-27 22:25:45.901972',
+    editor: null, is_active: true, question: 8, score: 0}
+  model: quiz.answer
+  pk: 22
+- fields: {answer: silently., creator: null, datetime_created: !!timestamp '2010-09-27
+      22:03:13.828118', datetime_modified: !!timestamp '2010-09-27 22:25:45.908113',
+    editor: null, is_active: true, question: 8, score: 1}
+  model: quiz.answer
+  pk: 23
+- fields: {answer: break down and cry., creator: null, datetime_created: !!timestamp '2010-09-27
+      22:04:12.209070', datetime_modified: !!timestamp '2010-09-27 22:25:45.923534',
+    editor: null, is_active: true, question: 9, score: 0}
+  model: quiz.answer
+  pk: 24
+- fields: {answer: screw the rules!, creator: null, datetime_created: !!timestamp '2010-09-27
+      22:04:12.211436', datetime_modified: !!timestamp '2010-09-27 22:25:45.941025',
+    editor: null, is_active: true, question: 9, score: 0}
+  model: quiz.answer
+  pk: 25
+- fields: {answer: guess., creator: null, datetime_created: !!timestamp '2010-09-27
+      22:04:12.213629', datetime_modified: !!timestamp '2010-09-27 22:25:45.947310',
+    editor: null, is_active: true, question: 9, score: 1}
+  model: quiz.answer
+  pk: 26
+- fields:
+    creator: null
+    datetime_created: 2010-09-27 21:53:57.287604
+    datetime_modified: 2010-09-27 22:25:45.952306
+    description: "\u201CAnd who better understands the Unix-nature?\u201D Master Foo\
+      \ asked. \u201CIs it he who writes the ten thousand lines, or he who, perceiving\
+      \ the emptiness of the task, gains merit by not coding?\u201D"
+    editor: null
+    name: Zen of Python
+    questions: [1, 2, 3, 4, 5, 6, 9, 8, 7]
+    slug: python-zen
+    status: 1
+  model: quiz.quiz
+  pk: 1
