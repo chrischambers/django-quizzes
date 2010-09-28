@@ -20,17 +20,16 @@ class TestAnswerQueryset(TestCase):
     def test_correct_property(self):
         correct_answers = Answer.objects.filter(score=Answer.CORRECT)
         assert_equal(list(correct_answers), list(Answer.objects.correct))
-        q = Question.objects.create(question='Test question')
-        a1 = Answer.objects.create(question=q, answer='f')
-        assert a1 not in Answer.objects.correct
-        a2 = Answer.objects.create(question=q, answer='t', score=Answer.CORRECT)
-        assert a2 in Answer.objects.correct
 
     def test_incorrect_property(self):
         incorrect_answers = Answer.objects.filter(score=Answer.INCORRECT)
         assert_equal(list(incorrect_answers), list(Answer.objects.incorrect))
+
+    def test_correct_incorrect_membership(self):
         q = Question.objects.create(question='Test question')
         a1 = Answer.objects.create(question=q, answer='f')
-        assert a1 in Answer.objects.incorrect
         a2 = Answer.objects.create(question=q, answer='t', score=Answer.CORRECT)
+        assert a1 in Answer.objects.incorrect
+        assert a1 not in Answer.objects.correct
         assert a2 not in Answer.objects.incorrect
+        assert a2 in Answer.objects.correct
