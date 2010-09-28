@@ -42,3 +42,24 @@ class TestAnswerQueryset(TestCase):
         assert a1 not in Answer.objects.correct
         assert a2 not in Answer.objects.incorrect
         assert a2 in Answer.objects.correct
+
+
+class TestQuestionQueryset(TestCase):
+    fixtures = ['python-zen.yaml']
+    # 1 quiz, 9 questions, 26 answers, 9 correct answers (one per question)
+
+    def test_answers_property(self):
+        assert_equal(
+            list(Answer.objects.order_by('id')),
+            list(Question.objects.answers.order_by('id'))
+        )
+        questions = Question.objects.all()[:5]
+        expected  = [q.answers.all() for q in questions]
+        expected  = sorted([i.id for sublist in expected for i in sublist])
+        actual    = sorted([i.id for i in questions.answers])
+        assert_equal(expected, actual)
+
+    def test_total_answers_property(self):
+        questions = Question.objects.all()
+        assert_equal(questions.answers.count(), questions.total_answers)
+        assert_equal(0, Question.objects.filter(id=None).total_answers)

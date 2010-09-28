@@ -6,7 +6,7 @@ from django_extensions.db.fields import (
 )
 from threaded_multihost.fields import CreatorField, EditorField
 
-from quiz.managers import AnswerManager
+from quiz.managers import QuestionManager, AnswerManager
 
 
 class AuditedModel(models.Model):
@@ -45,6 +45,10 @@ class Question(AuditedModel):
         related_name='questions_last_modified',
         limit_choices_to={'is_staff': True}
     )
+
+    objects = QuestionManager()
+
+
     class Meta(object):
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
@@ -85,6 +89,7 @@ class Answer(AuditedModel):
     )
 
     objects = AnswerManager()
+
 
     class Meta(object):
         unique_together = (('question', 'answer'),)
