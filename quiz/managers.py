@@ -26,13 +26,13 @@ class AnswerQuerySet(QuerySet):
 
     @property
     def correct(self):
-        # from quiz.models import Answer
-        # return self.filter(scorei=Answer.CORRECT)
-        return self.filter(score__gte=1)
+        from quiz.models import Answer
+        return self.filter(score=Answer.CORRECT)
 
     @property
     def incorrect(self):
-        return self.exclude(score__gte=1)
+        from quiz.models import Answer
+        return self.filter(score=Answer.INCORRECT)
 
 
 class AnswerManager(DRYManager):
