@@ -49,6 +49,18 @@ class QuizAdmin(admin.ModelAdmin):
 
 class QuizResultAdmin(admin.ModelAdmin):
     raw_id_fields = ['user']
+    fieldsets = (
+        (None, {
+            'fields': ('quiz', 'user', 'email', ('score', 'maximum_score')),
+        }),
+        ('Answers Provided', {
+            'fields': ('answers',),
+            'classes': ('collapse',)
+        }),
+        ('Metadata', {
+            'fields': ('creator', 'editor', 'datetime_created', 'datetime_modified')
+        }),
+    )
     readonly_fields = ('creator', 'editor', 'datetime_created', 'datetime_modified')
     date_hierarchy = "datetime_created"
     filter_vertical = ['answers']
