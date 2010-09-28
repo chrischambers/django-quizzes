@@ -34,6 +34,6 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.load_template_source',
 )
 
-# TEMPLATE_DIRS = os.path.join(APPLICATION_DIR, 'templates')
+TEMPLATE_DIRS = os.path.join(APPLICATION_DIR, 'templates')
 
 ROOT_URLCONF = 'quiz.urls'
