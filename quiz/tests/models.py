@@ -17,6 +17,15 @@ class TestAnswerQueryset(TestCase):
         Answer.objects.all().delete()
         assert_equal(0, Answer.objects.score)
 
+    def test_maximum_score_property(self):
+        assert_equal(0, Answer.objects.filter(id=None).maximum_score)
+        assert_equal(0, Answer.objects.incorrect.maximum_score)
+        assert_equal(9, Answer.objects.correct.maximum_score)
+        hard_questions = Question.objects.filter(
+            difficulty=Question.HARD).values_list('id', flat=True)
+        answers = Answer.objects.filter(question__id__in=hard_questions)
+        assert_equal(hard_questions.count(), answers.maximum_score)
+
     def test_correct_property(self):
         correct_answers = Answer.objects.filter(score=Answer.CORRECT)
         assert_equal(list(correct_answers), list(Answer.objects.correct))

@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Max
 from django.db.models.query import QuerySet
 
 
@@ -23,6 +23,15 @@ class AnswerQuerySet(QuerySet):
     def score(self):
         """Returns integer - total score of answers in queryset."""
         return self.aggregate(Sum('score')).values()[0] or 0
+
+    @property
+    def maximum_score(self):
+        """Returns the maximum score possible for a given set of answers."""
+        max_score = self.values('question').annotate(
+            top_answer=Max('score')
+        )
+        max_score = sum(d['top_answer'] for d in max_score)
+        return max_score
 
     @property
     def correct(self):
