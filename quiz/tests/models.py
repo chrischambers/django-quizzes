@@ -7,6 +7,16 @@ class TestAnswerQueryset(TestCase):
     fixtures = ['python-zen.yaml']
     # 1 quiz, 9 questions, 26 answers, 9 correct answers (one per question)
 
+    def test_live_property(self):
+        assert_equal(Answer.objects.count(), Answer.objects.live.count())
+        assert_equal(list(Answer.objects.all()), list(Answer.objects.live))
+        assert_equal(
+            list(Answer.objects.none()),
+            list(Answer.objects.filter(id=None).live)
+        )
+        Answer.objects.update(is_active=False)
+        assert_equal(0, Answer.objects.live.count())
+
     def test_score_property(self):
         assert_equal(Question.objects.count(), Answer.objects.score)
         q = Question.objects.create(question='the new answer count should be...')
@@ -47,6 +57,16 @@ class TestAnswerQueryset(TestCase):
 class TestQuestionQueryset(TestCase):
     fixtures = ['python-zen.yaml']
     # 1 quiz, 9 questions, 26 answers, 9 correct answers (one per question)
+
+    def test_live_property(self):
+        assert_equal(Question.objects.count(), Question.objects.live.count())
+        assert_equal(list(Question.objects.all()), list(Question.objects.live))
+        assert_equal(
+            list(Question.objects.none()),
+            list(Question.objects.filter(id=None).live)
+        )
+        Question.objects.update(is_active=False)
+        assert_equal(0, Question.objects.live.count())
 
     def test_answers_property(self):
         assert_equal(

@@ -20,6 +20,11 @@ class DRYManager(models.Manager):
 
 class AnswerQuerySet(QuerySet):
     @property
+    def live(self):
+        """Returns all public-facing objects."""
+        return self.filter(is_active=True)
+
+    @property
     def score(self):
         """Returns integer - total score of answers in queryset."""
         return self.aggregate(Sum('score')).values()[0] or 0
@@ -45,6 +50,11 @@ class AnswerQuerySet(QuerySet):
 
 
 class QuestionQuerySet(QuerySet):
+    @property
+    def live(self):
+        """Returns all public-facing objects."""
+        return self.filter(is_active=True)
+
     @property
     def answers(self):
         """Returns the answers for a given question set."""
