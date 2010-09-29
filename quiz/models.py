@@ -194,3 +194,7 @@ class QuizResult(AuditedModel):
             username, self.quiz,
             self.datetime_created.strftime('%d/%m/%Y, %H:%M:%S')
         )
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('quiz_completed', [], {'slug': self.quiz.slug, 'pk': self.pk})

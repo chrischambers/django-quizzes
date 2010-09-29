@@ -8,7 +8,7 @@
 {% for quiz in object_list %}
   <li>
     <ul>
-      <li><strong>{{ quiz.name }}</strong></li>
+      <li><strong><a href="{{ quiz.get_absolute_url }}">{{ quiz.name }}</a></strong></li>
       <li>{{ quiz.description }}</li>
     </ul>
   </li>

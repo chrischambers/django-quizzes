@@ -1,0 +1,15 @@
+- fields:
+    date_joined: 2010-09-29 18:28:59.762663
+    email: testy@test.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2010-09-29 18:28:59.766148
+    last_name: ''
+    password: sha1$e9303$2e542ba7a7f8275b6c112f0f54cce4199cc8b893
+    user_permissions: []
+    username: TestyMcTesterson
+  model: auth.user
+  pk: 1
