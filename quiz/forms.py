@@ -1,11 +1,27 @@
 from django import forms
-from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 from django.forms.formsets import formset_factory, BaseFormSet, INITIAL_FORM_COUNT
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 
 from quiz.models import Answer, QuizResult
 from wadofstuff.django.forms import BoundFormWizard
+
+
+class EmailForm(forms.Form):
+    """Simple form for capturing an unauthenticated user's email address."""
+
+    EXISTING_EMAIL_ADDRESS = _(
+        'This email address already belongs to a user '
+        'on our site.'
+    )
+    email = forms.EmailField()
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(self.EXISTING_EMAIL_ADDRESS)
+        return email
 
 
 class QuestionForm(forms.Form):
@@ -114,16 +130,14 @@ class QuizBoundFormWizard(BoundFormWizard):
         max_score = self.get_maximum_score(formset_list)
         answers   = reduce(lambda x,y: x|y, (fs.get_answers() for fs in formset_list))
         if request.user.is_authenticated():
-            result = QuizResult.objects.create(
-                user=request.user,
-                email=request.user.email,
-                quiz=quiz,
-                score=score,
-                maximum_score=max_score
-            )
-            result.answers.add(*answers)
-            return HttpResponseRedirect(
-                reverse('quiz_completed', args=(quiz.slug, result.pk))
-            )
-        from django.http import Http404
-        raise Http404
+            data = {'user': request.user, 'email': request.user.email}
+        else:
+            data = {'email': request.session['email']}
+        result = QuizResult.objects.create(
+            quiz=quiz,
+            score=score,
+            maximum_score=max_score,
+            **data
+        )
+        result.answers.add(*answers)
+        return HttpResponseRedirect(result.get_absolute_url())

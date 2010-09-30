@@ -1,14 +1,39 @@
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
 from quiz.models import Quiz, Question, QuizResult
-from quiz.forms import quiz_formset_factory, QuizBoundFormWizard
+from quiz.forms import quiz_formset_factory, QuizBoundFormWizard, EmailForm
 try:
     from functools import partial
 except ImportError: # Python 2.3, 2.4 fallback.
     from django.utils.functional import curry as partial
 
+def capture_email(request, *args, **kwargs):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('quiz_list'))
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            request.session['email'] = form.cleaned_data['email']
+            next = request.GET.get('next') or reverse('quiz_list')
+            return HttpResponseRedirect(next)
+    else:
+        form = EmailForm()
+
+    data = {'form': form, }
+
+    return render_to_response("quiz/capture_email.html", data,
+                            context_instance=RequestContext(request))
+
+
 def quiz_detail(request, slug, *args, **kwargs):
+    if not request.user.is_authenticated() and not request.session.get('email'):
+        redirect_url = "%s?next=%s" % (
+            reverse('quiz_capture_email'), request.path
+        )
+        return HttpResponseRedirect(redirect_url)
     quiz    = get_object_or_404(Quiz, slug=slug)
     FormSet = quiz_formset_factory(quiz)
     easy    = partial(FormSet, difficulty=Question.EASY,   prefix='easy')

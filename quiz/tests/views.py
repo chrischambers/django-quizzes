@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from quiz.forms import EmailForm
 from quiz.models import Quiz, QuizResult
 
 
@@ -60,9 +61,6 @@ class TestQuizDetailView(TestCase):
         super(TestQuizDetailView, self).setUp()
         self.quiz = Quiz.objects.get(slug='python-zen')
         self.user = User.objects.get(username='TestyMcTesterson')
-        self.assertTrue(
-            self.client.login(username=self.user.username, password='password')
-        )
 
         self.data = ({
                 'wizard_step': '0',
@@ -90,8 +88,8 @@ class TestQuizDetailView(TestCase):
 
     def grab_field_data(self, response):
         """
-        Pull the appropriate field data from the context to pass to the next
-        wizard step
+        Pulls the appropriate field data from the context to pass to the next
+        wizard step.
 
         -- Excerpted (but modified) from actual Django Formwizard tests
         """
@@ -107,27 +105,35 @@ class TestQuizDetailView(TestCase):
         self.input_re.sub(grab, previous_fields)
         return fields
 
+    def complete_quiz(self, slug):
+        response = self.client.post(
+            reverse('quiz_detail', args=[slug]), data=self.data[0]
+        )
+        assert_equal(200, response.status_code)
+        data = self.grab_field_data(response)
+        data.update(self.data[1])
+        response = self.client.post(
+            reverse('quiz_detail', args=[slug]), data=data
+        )
+        data = self.grab_field_data(response)
+        data.update(self.data[2])
+        response = self.client.post(
+            reverse('quiz_detail', args=[slug]), data=data
+        )
+        return response
+
     def test_quiz_detail_view_with_no_inputs(self):
         response = self.client.get(
             reverse('quiz_detail', args=[self.quiz.slug]), follow=True
         )
         assert_equal(200, response.status_code)
 
-    def test_quiz_detail_view_with_good_inputs(self):
+    def test_quiz_detail_view_with_good_inputs_authenticated(self):
+        self.assertTrue(
+            self.client.login(username=self.user.username, password='password')
+        )
         assert_false(QuizResult.objects.count())
-        response = self.client.post(
-            reverse('quiz_detail', args=[self.quiz.slug]), data=self.data[0]
-        )
-        data = self.grab_field_data(response)
-        data.update(self.data[1])
-        response = self.client.post(
-            reverse('quiz_detail', args=[self.quiz.slug]), data=data
-        )
-        data = self.grab_field_data(response)
-        data.update(self.data[2])
-        response = self.client.post(
-            reverse('quiz_detail', args=[self.quiz.slug]), data=data
-        )
+        response = self.complete_quiz(self.quiz.slug)
         quiz_result = QuizResult.objects.get(
             quiz=self.quiz, user=self.user
         )
@@ -142,4 +148,90 @@ class TestQuizDetailView(TestCase):
         assert_equal(quiz_result.score, quiz_result.maximum_score)
         assert_equal(
             set(quiz_result.answers.all()), set(self.quiz.questions.answers.correct)
+        )
+
+    def test_quiz_detail_redirects_for_anon_users_with_no_session_email(self):
+        response = self.client.get(
+            reverse('quiz_detail', args=(self.quiz.slug,)), follow=True
+        )
+        expected_redirect = "%s?next=%s" % (
+            reverse('quiz_capture_email'),
+            reverse('quiz_detail', args=(self.quiz.slug,))
+        )
+        self.assertRedirects(response, expected_redirect)
+
+    def test_quiz_detail_view_with_good_inputs_unauthenticated(self):
+        assert_false(QuizResult.objects.count())
+
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # Waiting for this to land... http://code.djangoproject.com/ticket/10899
+        # What SHOULD be as simple as this:
+        # >>> self.client.session['email'] = 'foo@bar.com'
+        # is currently this madness...
+        from django.conf import settings
+        from django.utils.importlib import import_module
+        engine = import_module(settings.SESSION_ENGINE)
+        store = engine.SessionStore()
+        store.save()  # we need to make load() work, or the cookie is worthless
+        self.client.cookies[settings.SESSION_COOKIE_NAME] = store.session_key
+        session = self.client.session
+        session['email'] = 'foo@bar.com'
+        session.save()
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        response = self.complete_quiz(self.quiz.slug)
+        quiz_result = QuizResult.objects.get(
+            quiz=self.quiz, email='foo@bar.com'
+        )
+        self.assertRedirects(
+            response,
+            reverse('quiz_completed', args=(self.quiz.slug, quiz_result.pk)),
+            status_code=302,
+            target_status_code=200
+        )
+        assert not quiz_result.user
+        assert_equal(quiz_result.score, self.quiz.questions.answers.maximum_score)
+        assert_equal(quiz_result.score, quiz_result.maximum_score)
+        assert_equal(
+            set(quiz_result.answers.all()), set(self.quiz.questions.answers.correct)
+        )
+
+
+class TestQuizCaptureEmailView(TestCase):
+    fixtures = ['python-zen.yaml', 'testuser.yaml']
+    # 1 quiz, 9 questions, 26 answers, 9 correct answers (one per question)
+    # A single test-user, TestyMcTesterson, with password 'password'
+
+    def setUp(self):
+        super(TestQuizCaptureEmailView, self).setUp()
+        self.quiz = Quiz.objects.get(slug='python-zen')
+        self.user = User.objects.get(username='TestyMcTesterson')
+
+    def test_authenticated_users_redirected_to_quiz_list(self):
+        self.client.login(username=self.user.username, password='password')
+        response = self.client.get(reverse('quiz_capture_email'), follow=True)
+        self.assertRedirects(response, reverse('quiz_list'))
+
+    def test_unauthenticated_users_not_redirected(self):
+        response = self.client.get(reverse('quiz_capture_email'), follow=True)
+        assert_equal(200, response.status_code)
+
+    def test_emailform_success(self):
+        data = {'email': 'foo@bar.com'}
+        response = self.client.post(
+            reverse('quiz_capture_email'), data=data, follow=True
+        )
+        self.assertRedirects(response, reverse('quiz_list'))
+        assert_equal(data['email'], response.client.session['email'])
+        response = self.client.get(
+            reverse('quiz_detail', args=(self.quiz.slug,)), follow=True
+        )
+        assert_equal(200, response.status_code)
+
+    def test_emailform_with_existing_user_email(self):
+        response = self.client.post(
+            reverse('quiz_capture_email'), {'email': self.user.email}, follow=True
+        )
+        self.assertFormError(
+            response, 'form', 'email', EmailForm.EXISTING_EMAIL_ADDRESS
         )
