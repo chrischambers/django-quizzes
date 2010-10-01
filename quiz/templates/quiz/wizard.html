@@ -5,11 +5,14 @@
 {% block primary %}
 <h1>{{ quiz.name }} Quiz</h1>
 
-{% if user|quiz_taken:quiz %}
+{% with user|quiz_taken:quiz as times_quiz_taken %}
+{% if times_quiz_taken and step == 1 %}
 <div class="notice">
-  <p>You have already taken this quiz, but feel free to take it again!</p>
+  <p>You have already taken this quiz {{ times_quiz_taken }}
+  time{{ times_quiz_taken|pluralize }}, but feel free to take it again!</p>
 </div>
 {% endif %}
+{% endwith %}
 
 <p class="step">Step {{ step }} of {{ step_count }}</p>
 <form action="" method="post">{% csrf_token %}

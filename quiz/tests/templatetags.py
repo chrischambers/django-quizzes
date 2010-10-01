@@ -36,16 +36,25 @@ class TestQuizTakenFilter(TestCase):
         self.user = User.objects.get(username='TestyMcTesterson')
 
     def test_quiz_taken_with_valid_inputs(self):
-        assert quiz_taken(self.user, self.quiz) is False
+        assert_equal(0, quiz_taken(self.user, self.quiz))
         result = QuizResult.objects.create(
             user=self.user,
             quiz=self.quiz,
             score=9,
             maximum_score=9
         )
-        assert quiz_taken(self.user, self.quiz) is True
+        assert_equal(1, quiz_taken(self.user, self.quiz))
+        result2 = QuizResult.objects.create(
+            user=self.user,
+            quiz=self.quiz,
+            score=8,
+            maximum_score=9
+        )
+        assert_equal(2, quiz_taken(self.user, self.quiz))
         result.delete()
-        assert quiz_taken(self.user, self.quiz) is False
+        assert_equal(1, quiz_taken(self.user, self.quiz))
+        result2.delete()
+        assert_equal(0, quiz_taken(self.user, self.quiz))
 
     def test_quiz_taken_with_invalid_inputs(self):
         assert_equal('', quiz_taken('foo', self.quiz))

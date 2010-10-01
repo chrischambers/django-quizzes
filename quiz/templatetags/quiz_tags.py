@@ -14,7 +14,9 @@ def percentage(part, population):
 
 @register.filter(name='quiz_taken')
 def quiz_taken(user, quiz):
+    """Returns the amount of times the user has taken the specified quiz. Can
+    also be used as a simple boolean."""
     if (not isinstance(user, User) or
         not isinstance(quiz, Quiz)):
         return ''
-    return QuizResult.objects.filter(user=user, quiz=quiz).exists()
+    return QuizResult.objects.filter(user=user, quiz=quiz).count()
