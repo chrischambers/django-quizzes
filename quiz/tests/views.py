@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from quiz.forms import EmailForm
-from quiz.models import Quiz, QuizResult
+from quiz.models import Quiz, QuizResult, Question
 from quiz.views import redirect_to_quiz_list
 
 
@@ -248,6 +248,59 @@ class TestQuizCaptureEmailView(TestCase):
         self.assertFormError(
             response, 'form', 'email', EmailForm.EXISTING_EMAIL_ADDRESS
         )
+
+
+class TestQuizDetailDifficulty(TestCase):
+    fixtures = ['testuser.yaml']
+    # A single test-user, TestyMcTesterson, with password 'password'
+
+    def setUp(self):
+        super(TestQuizDetailDifficulty, self).setUp()
+        self.user = User.objects.get(username='TestyMcTesterson')
+        self.expected = '<p class="step">Step 1 of %s</p>'
+        self.assertTrue(
+            self.client.login(username=self.user.username, password='password')
+        )
+
+    def tearDown(self):
+        super(TestQuizDetailDifficulty, self).tearDown()
+        Quiz.objects.all().delete()
+        Question.objects.all().delete()
+
+    def test_easy_quiz_has_1_step(self):
+        quiz = Quiz.objects.create(name='easy', slug='easy', status=Quiz.LIVE)
+        q1 = Question.objects.create(question='foo')
+        q2 = Question.objects.create(question='bar')
+        quiz.questions.add(q1)
+        quiz.questions.add(q2)
+        response = self.client.get(
+            reverse('quiz_detail', args=[quiz.slug]), follow=True
+        )
+        self.assertContains(response, self.expected % 1)
+
+    def test_medium_quiz_has_2_steps(self):
+        quiz = Quiz.objects.create(name='easy', slug='easy', status=Quiz.LIVE)
+        q1 = Question.objects.create(question='foo', difficulty=Question.EASY)
+        q2 = Question.objects.create(question='bar', difficulty=Question.MEDIUM)
+        quiz.questions.add(q1)
+        quiz.questions.add(q2)
+        response = self.client.get(
+            reverse('quiz_detail', args=[quiz.slug]), follow=True
+        )
+        self.assertContains(response, self.expected % 2)
+
+    def test_hard_quiz_has_3_steps(self):
+        quiz = Quiz.objects.create(name='easy', slug='easy', status=Quiz.LIVE)
+        q1 = Question.objects.create(question='foo', difficulty=Question.EASY)
+        q2 = Question.objects.create(question='bar', difficulty=Question.MEDIUM)
+        q3 = Question.objects.create(question='bar', difficulty=Question.HARD)
+        quiz.questions.add(q1)
+        quiz.questions.add(q2)
+        quiz.questions.add(q3)
+        response = self.client.get(
+            reverse('quiz_detail', args=[quiz.slug]), follow=True
+        )
+        self.assertContains(response, self.expected % 3)
 
 
 class TestRedirectToQuizList(TestCase):

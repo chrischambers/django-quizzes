@@ -39,11 +39,15 @@ def quiz_detail(request, slug, *args, **kwargs):
         )
         return HttpResponseRedirect(redirect_url)
     FormSet = quiz_formset_factory(quiz)
-    easy    = partial(FormSet, difficulty=Question.EASY,   prefix='easy')
-    medium  = partial(FormSet, difficulty=Question.MEDIUM, prefix='medium')
-    hard    = partial(FormSet, difficulty=Question.HARD,   prefix='hard')
+    formset_list = []
+    if quiz.questions.filter(difficulty=Question.EASY).exists():
+        formset_list.append(partial(FormSet, difficulty=Question.EASY,   prefix='easy'))
+    if quiz.questions.filter(difficulty=Question.MEDIUM).exists():
+        formset_list.append(partial(FormSet, difficulty=Question.MEDIUM, prefix='medium'))
+    if quiz.questions.filter(difficulty=Question.HARD).exists():
+        formset_list.append(partial(FormSet, difficulty=Question.HARD,   prefix='hard'))
     extra_context = {'quiz': quiz}
-    return QuizBoundFormWizard([easy, medium, hard])(
+    return QuizBoundFormWizard(formset_list)(
         request, extra_context=extra_context, *args, **kwargs
     )
 
