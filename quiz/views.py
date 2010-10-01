@@ -3,9 +3,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.views.generic import simple
+from django.template.defaultfilters import slugify
 
-from quiz.models import Quiz, Question, QuizResult
+from quiz.models import Quiz, QuizResult
 from quiz.forms import quiz_formset_factory, QuizBoundFormWizard, EmailForm
+from quiz.utils import get_display_name
 try:
     from functools import partial
 except ImportError: # Python 2.3, 2.4 fallback.
@@ -39,13 +41,15 @@ def quiz_detail(request, slug, *args, **kwargs):
         )
         return HttpResponseRedirect(redirect_url)
     FormSet = quiz_formset_factory(quiz)
+
     formset_list = []
-    if quiz.questions.filter(difficulty=Question.EASY).exists():
-        formset_list.append(partial(FormSet, difficulty=Question.EASY,   prefix='easy'))
-    if quiz.questions.filter(difficulty=Question.MEDIUM).exists():
-        formset_list.append(partial(FormSet, difficulty=Question.MEDIUM, prefix='medium'))
-    if quiz.questions.filter(difficulty=Question.HARD).exists():
-        formset_list.append(partial(FormSet, difficulty=Question.HARD,   prefix='hard'))
+    difficulty_levels = sorted(list(set(
+        quiz.questions.values_list('difficulty', flat=True)
+    )))
+    for diff in difficulty_levels:
+        prefix = slugify(get_display_name(diff))
+        formset_list.append(partial(FormSet, difficulty=diff, prefix=prefix))
+
     extra_context = {'quiz': quiz}
     return QuizBoundFormWizard(formset_list)(
         request, extra_context=extra_context, *args, **kwargs
