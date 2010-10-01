@@ -1,7 +1,15 @@
 {% extends "quiz/quiz_detail.html" %}
+{% load quiz_tags %}
+
 
 {% block primary %}
 <h1>{{ quiz.name }} Quiz</h1>
+
+{% if user|quiz_taken:quiz %}
+<div class="notice">
+  <p>You have already taken this quiz, but feel free to take it again!</p>
+</div>
+{% endif %}
 
 <p class="step">Step {{ step }} of {{ step_count }}</p>
 <form action="" method="post">{% csrf_token %}
