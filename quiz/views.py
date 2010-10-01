@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
+from django.views.generic import simple
 
 from quiz.models import Quiz, Question, QuizResult
 from quiz.forms import quiz_formset_factory, QuizBoundFormWizard, EmailForm
@@ -9,6 +10,9 @@ try:
     from functools import partial
 except ImportError: # Python 2.3, 2.4 fallback.
     from django.utils.functional import curry as partial
+
+def redirect_to_quiz_list(request, *args, **kwargs):
+    return simple.redirect_to(request, url=reverse('quiz_list'))
 
 def capture_email(request, *args, **kwargs):
     if request.user.is_authenticated():
@@ -26,7 +30,6 @@ def capture_email(request, *args, **kwargs):
 
     return render_to_response("quiz/capture_email.html", data,
                             context_instance=RequestContext(request))
-
 
 def quiz_detail(request, slug, *args, **kwargs):
     quiz = get_object_or_404(Quiz.objects.exclude(status=Quiz.CLOSED), slug=slug)

@@ -7,6 +7,7 @@ from django.test import TestCase
 
 from quiz.forms import EmailForm
 from quiz.models import Quiz, QuizResult
+from quiz.views import redirect_to_quiz_list
 
 
 class TestQuizListView(TestCase):
@@ -247,3 +248,29 @@ class TestQuizCaptureEmailView(TestCase):
         self.assertFormError(
             response, 'form', 'email', EmailForm.EXISTING_EMAIL_ADDRESS
         )
+
+
+class TestRedirectToQuizList(TestCase):
+    fixtures = ['python-zen.yaml', 'testuser.yaml']
+    # 1 quiz, 9 questions, 26 answers, 9 correct answers (one per question)
+    # A single test-user, TestyMcTesterson, with password 'password'
+
+    def setUp(self):
+        super(TestRedirectToQuizList, self).setUp()
+        self.quiz = Quiz.objects.get(slug='python-zen')
+        self.user = User.objects.get(username='TestyMcTesterson')
+
+    def test_redirect_works_unauthenticated(self):
+        response = self.client.get(
+            reverse(redirect_to_quiz_list, args=(self.quiz.slug,)), follow=True
+        )
+        assert_equal(200, response.status_code)
+        self.assertRedirects(response, reverse('quiz_list'), status_code=301)
+
+    def test_redirect_works_authenticated(self):
+        self.client.login(username=self.user.username, password='password')
+        response = self.client.get(
+            reverse(redirect_to_quiz_list, args=(self.quiz.slug,)), follow=True
+        )
+        assert_equal(200, response.status_code)
+        self.assertRedirects(response, reverse('quiz_list'), status_code=301)

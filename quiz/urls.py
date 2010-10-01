@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^capture-email/$', views.capture_email, name='quiz_capture_email'),
     url(r'^$', list_detail.object_list, data, name='quiz_list'),
     url(r'^(?P<slug>[^/]+)/$', views.quiz_detail, name='quiz_detail'),
+    url(r'^(?P<slug>[^/]+)/complete/$', views.redirect_to_quiz_list),
     url(r'^(?P<slug>[^/]+)/complete/(?P<pk>\d+)/$',
         views.quiz_completed, name='quiz_completed'),
 )
