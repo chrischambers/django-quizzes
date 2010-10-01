@@ -2,17 +2,16 @@
 {% block title %}{{ quiz.name }} - {{ block.super }}{% endblock %}
 
 {% block primary %}
-<h1>{{ quiz.name }} Quiz</h1>
+  <h1>{{ quiz.name }} Quiz</h1>
 
-<form action="" method="post">{% csrf_token %}
-  {{ formset.management_form }}
-  {% for form in formset.forms %}
-  <fieldset>
-    <legend>{{ form.question }}</legend>
-    {{ form.as_p }}
-  </fieldset>
-  {% endfor %}
-  <p><input type="submit" value="Done &rarr;"></p>
-</form>
-
+  <form action="" method="post">{% csrf_token %}
+    {{ formset.management_form }}
+    {% for form in formset.forms %}
+    <fieldset>
+      <legend>{{ form.question }}</legend>
+      {{ form.as_p }}
+    </fieldset>
+    {% endfor %}
+    <p><input type="submit" value="Done &rarr;"></p>
+  </form>
 {% endblock %}

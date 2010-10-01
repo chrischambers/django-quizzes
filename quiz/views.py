@@ -17,6 +17,9 @@ def redirect_to_quiz_list(request, *args, **kwargs):
     return simple.redirect_to(request, url=reverse('quiz_list'))
 
 def capture_email(request, *args, **kwargs):
+    """Unauthenticated users are redirected to this view from the quiz_detail
+    url in order to provide an email address to associate their quiz results
+    with."""
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('quiz_list'))
     if request.method == 'POST':
@@ -34,6 +37,9 @@ def capture_email(request, *args, **kwargs):
                             context_instance=RequestContext(request))
 
 def quiz_detail(request, slug, *args, **kwargs):
+    """This view displays a ``FormWizard`` with the questions grouped by
+    difficulty. There is a page for each level of difficulty, and each page
+    is progressively more difficult."""
     quiz = get_object_or_404(Quiz.objects.exclude(status=Quiz.CLOSED), slug=slug)
     if not request.user.is_authenticated() and not request.session.get('email'):
         redirect_url = "%s?next=%s" % (
@@ -69,4 +75,3 @@ def quiz_completed(request, slug, pk, *args, **kwargs):
     }
     return render_to_response("quiz/quiz_complete.html", data,
                         context_instance=RequestContext(request))
-

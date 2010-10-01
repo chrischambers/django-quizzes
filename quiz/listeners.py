@@ -19,4 +19,3 @@ def start_listening():
 def stop_listening():
     """Inverse of start_listening."""
     post_save.disconnect(update_quiz_results, sender=User)
-

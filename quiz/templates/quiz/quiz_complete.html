@@ -3,11 +3,10 @@
 {% block title %}Completed - {{ block.super }}{% endblock %}
 
 {% block primary %}
-<h1>Congratulations, {{ test_taker.get_full_name|default:"Quiz Taker" }}!</h1>
+  <h1>Congratulations, {{ test_taker.get_full_name|default:"Quiz Taker" }}!</h1>
 
-<p>Quiz taken: <em>{{ quiz.name }}</em></p>
-<p>Date taken: {{ datetime_taken|date:"d/m/Y" }}</p>
-<p>You have achieved a score of {{ score }} out of {{ maximum_score }}.</p>
-<p>That's {{ score|percentage:maximum_score|floatformat:0 }}%!</p>
-
+  <p>Quiz taken: <em>{{ quiz.name }}</em></p>
+  <p>Date taken: {{ datetime_taken|date:"d/m/Y" }}</p>
+  <p>You have achieved a score of {{ score }} out of {{ maximum_score }}.</p>
+  <p>That's {{ score|percentage:maximum_score|floatformat:0 }}%!</p>
 {% endblock %}

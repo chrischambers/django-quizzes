@@ -62,6 +62,7 @@ class Question(AuditedModel):
         question = super(Question, self).save(*args, **kwargs)
         return question
 
+
 class Answer(AuditedModel):
     """Represents a Multiple Choice Quiz Answer."""
     INCORRECT, CORRECT = 0, 1
@@ -191,6 +192,7 @@ class QuizResult(AuditedModel):
         related_name='quiz_results_last_modified',
         limit_choices_to={'is_staff': True}
     )
+
 
     class Meta(object):
         verbose_name = _('Quiz Result')

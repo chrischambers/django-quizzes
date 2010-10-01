@@ -1,33 +1,31 @@
 {% extends "quiz/quiz_detail.html" %}
 {% load quiz_tags %}
 
-
 {% block primary %}
-<h1>{{ quiz.name }} Quiz</h1>
+  <h1>{{ quiz.name }} Quiz</h1>
 
-{% with user|quiz_taken:quiz as times_quiz_taken %}
-{% if times_quiz_taken and step == 1 %}
-<div class="notice">
-  <p>You have already taken this quiz {{ times_quiz_taken }}
-  time{{ times_quiz_taken|pluralize }}, but feel free to take it again!</p>
-</div>
-{% endif %}
-{% endwith %}
-
-<p class="step">Step {{ step }} of {{ step_count }}</p>
-<form action="" method="post">{% csrf_token %}
-  {% with form as formset %}
-  {{ formset.management_form }}
-  {% for form in formset.forms %}
-  <fieldset>
-    <legend>{{ form.question }}</legend>
-    {{ form.as_p }}
-  </fieldset>
-  {% endfor %}
-  <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
-  {% for f in previous_fields %}{{ f.as_hidden }}{% endfor %}
-  <p><input type="submit" value="{% if step == step_count %}Done{% else %}Next{% endif %} &rarr;"></p>
+  {% with user|quiz_taken:quiz as times_quiz_taken %}
+  {% if times_quiz_taken and step == 1 %}
+  <div class="notice">
+    <p>You have already taken this quiz {{ times_quiz_taken }}
+    time{{ times_quiz_taken|pluralize }}, but feel free to take it again!</p>
+  </div>
+  {% endif %}
   {% endwith %}
-</form>
 
+  <p class="step">Step {{ step }} of {{ step_count }}</p>
+  <form action="" method="post">{% csrf_token %}
+    {% with form as formset %}
+    {{ formset.management_form }}
+    {% for form in formset.forms %}
+    <fieldset>
+      <legend>{{ form.question }}</legend>
+      {{ form.as_p }}
+    </fieldset>
+    {% endfor %}
+    <input type="hidden" name="{{ step_field }}" value="{{ step0 }}" />
+    {% for f in previous_fields %}{{ f.as_hidden }}{% endfor %}
+    <p><input type="submit" value="{% if step == step_count %}Done{% else %}Next{% endif %} &rarr;"></p>
+    {% endwith %}
+  </form>
 {% endblock %}

@@ -2,14 +2,13 @@
 {% block title %}Capture Email - {{ block.super }}{% endblock %}
 
 {% block primary %}
-<h1>Please provide an Email address to continue</h1>
+  <h1>Please provide an Email address to continue</h1>
 
-<p>To continue taking this quiz you must provide an email address using the
-form below.</p>
+  <p>To continue taking this quiz you must provide an email address using the
+  form below, or login.</p>
 
-<form method="post" action="">{% csrf_token %}
-  {{ form.as_p }}
-  <p><input type="submit" value="Submit" /></p>
-</form>
-
+  <form method="post" action="">{% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Submit" /></p>
+  </form>
 {% endblock %}
