@@ -3,6 +3,35 @@ from quiz.models import Question, Answer
 from nose.tools import *
 
 
+class TestQuestionAnswerStripWhiteSpace(TestCase):
+    def setUp(self):
+        super(TestQuestionAnswerStripWhiteSpace, self).setUp()
+        self.expected = 'foo bar baz'
+        self.variants = (
+            '    foo bar baz',
+            'foo bar baz    ',
+            '  foo bar baz  ',
+        )
+
+    def test_question_strip_whitespace(self):
+        for v in self.variants:
+            question = Question.objects.create(
+                question=v
+            )
+            assert_equal(question.question, self.expected)
+            question.delete()
+
+    def test_answer_strip_whitespace(self):
+        question = Question.objects.create(question='foo')
+        for v in self.variants:
+            answer = Answer.objects.create(
+                question=question,
+                answer=v
+            )
+            assert_equal(answer.answer, self.expected)
+            answer.delete()
+
+
 class TestAnswerQueryset(TestCase):
     fixtures = ['python-zen.yaml']
     # 1 quiz, 9 questions, 26 answers, 9 correct answers (one per question)

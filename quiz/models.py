@@ -57,6 +57,10 @@ class Question(AuditedModel):
     def __unicode__(self):
         return u"%s" % (self.question,)
 
+    def save(self, *args, **kwargs):
+        self.question = self.question.strip()
+        question = super(Question, self).save(*args, **kwargs)
+        return question
 
 class Answer(AuditedModel):
     """Represents a Multiple Choice Quiz Answer."""
@@ -99,6 +103,11 @@ class Answer(AuditedModel):
 
     def __unicode__(self):
         return u"%s" % (self.answer,)
+
+    def save(self, *args, **kwargs):
+        self.answer = self.answer.strip()
+        answer = super(Answer, self).save(*args, **kwargs)
+        return answer
 
 
 class Quiz(AuditedModel):
