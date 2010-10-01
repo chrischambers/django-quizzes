@@ -29,12 +29,12 @@ def capture_email(request, *args, **kwargs):
 
 
 def quiz_detail(request, slug, *args, **kwargs):
+    quiz = get_object_or_404(Quiz.objects.exclude(status=Quiz.CLOSED), slug=slug)
     if not request.user.is_authenticated() and not request.session.get('email'):
         redirect_url = "%s?next=%s" % (
             reverse('quiz_capture_email'), request.path
         )
         return HttpResponseRedirect(redirect_url)
-    quiz    = get_object_or_404(Quiz, slug=slug)
     FormSet = quiz_formset_factory(quiz)
     easy    = partial(FormSet, difficulty=Question.EASY,   prefix='easy')
     medium  = partial(FormSet, difficulty=Question.MEDIUM, prefix='medium')

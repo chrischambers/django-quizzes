@@ -196,6 +196,18 @@ class TestQuizDetailView(TestCase):
             set(quiz_result.answers.all()), set(self.quiz.questions.answers.correct)
         )
 
+    def test_quiz_detail_for_draft_quiz_displays(self):
+        self.quiz.status = Quiz.DRAFT
+        self.quiz.save()
+        response = self.client.get(self.quiz.get_absolute_url(), follow=True)
+        assert_equal(200, response.status_code)
+
+    def test_quiz_detail_for_closed_quiz_not_found(self):
+        self.quiz.status = Quiz.CLOSED
+        self.quiz.save()
+        response = self.client.get(self.quiz.get_absolute_url(), follow=True)
+        assert_equal(404, response.status_code)
+
 
 class TestQuizCaptureEmailView(TestCase):
     fixtures = ['python-zen.yaml', 'testuser.yaml']
