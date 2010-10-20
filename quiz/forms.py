@@ -94,13 +94,6 @@ class QuizBaseFormSet(BaseFormSet):
         relevant_answers = Answer.objects.filter(question__in=questions)
         return relevant_answers.maximum_score
 
-    def calculate_score_percentage(self, round=True):
-        if not round:
-            round = lambda x: x
-        if not hasattr(self, 'result'):
-            self.calculate_score()
-        return int(round((float(self.result) / self.maximum_score) * 100))
-
 
 def quiz_formset_factory(quiz, form=QuestionForm, formset=QuizBaseFormSet,
                          extra=0, *args, **kwargs):
