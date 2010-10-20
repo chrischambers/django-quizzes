@@ -19,6 +19,7 @@ class AuditedModel(models.Model):
 
 
 class Question(AuditedModel):
+    """Represents a Multiple Choice Quiz Question."""
     EASY, MEDIUM, HARD = 1, 10, 20
     DIFFICULTY_CHOICES = (
         (EASY,   _('Easy')),
@@ -112,6 +113,7 @@ class Answer(AuditedModel):
 
 
 class Quiz(AuditedModel):
+    """Represents a Multiple Choice Quiz."""
     LIVE, DRAFT, CLOSED = 1, 2, 3
     STATUS_CHOICES = (
         (LIVE,   _('Live')),

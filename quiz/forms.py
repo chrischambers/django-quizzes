@@ -112,8 +112,8 @@ def quiz_formset_factory(quiz, form=QuestionForm, formset=QuizBaseFormSet,
 
 
 class QuizBoundFormWizard(BoundFormWizard):
-    """The BoundFormWizard parent is necessary because the default FormWizard
-    doesn't handle formsets."""
+    # The BoundFormWizard parent is necessary because the default FormWizard
+    # doesn't handle formsets.
 
     def get_template(self, step):
         return 'quiz/wizard.html'

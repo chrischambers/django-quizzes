@@ -18,7 +18,7 @@ def redirect_to_quiz_list(request, *args, **kwargs):
 
 def capture_email(request, *args, **kwargs):
     """Unauthenticated users are redirected to this view from the quiz_detail
-    url in order to provide an email address to associate their quiz results
+    url, in order to provide an email address to associate their quiz results
     with."""
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('quiz_list'))
