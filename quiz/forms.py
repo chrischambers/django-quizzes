@@ -23,6 +23,10 @@ class EmailForm(forms.Form):
             raise forms.ValidationError(self.EXISTING_EMAIL_ADDRESS)
         return email
 
+    def save(self, *args, **kwargs):
+        # Default operation: no-op
+        pass
+
 
 class QuestionForm(forms.Form):
     answers = forms.TypedChoiceField(

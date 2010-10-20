@@ -16,15 +16,16 @@ except ImportError: # Python 2.3, 2.4 fallback.
 def redirect_to_quiz_list(request, *args, **kwargs):
     return simple.redirect_to(request, url=reverse('quiz_list'))
 
-def capture_email(request, *args, **kwargs):
+def capture_email(request, FormClass=EmailForm, *args, **kwargs):
     """Unauthenticated users are redirected to this view from the quiz_detail
     url, in order to provide an email address to associate their quiz results
     with."""
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('quiz_list'))
     if request.method == 'POST':
-        form = EmailForm(request.POST)
+        form = FormClass(request.POST)
         if form.is_valid():
+            form.save()
             request.session['email'] = form.cleaned_data['email']
             next = request.GET.get('next') or reverse('quiz_list')
             return HttpResponseRedirect(next)
