@@ -65,6 +65,9 @@ class QuizResultAdmin(admin.ModelAdmin):
     date_hierarchy = "datetime_created"
     filter_vertical = ['answers']
     list_display = ['user', 'email', 'datetime_created', 'score', 'maximum_score']
+    list_display = ['quiz', 'user', 'email', 'datetime_created', 'score',
+                    'maximum_score']
+    search_fields = ('user__first_name', 'user__last_name', 'user__email', 'email')
     list_filter = ('datetime_created',)
 
 
